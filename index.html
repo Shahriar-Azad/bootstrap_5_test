@@ -98,7 +98,284 @@
     <p class="fw-light">light text</p>
     <p class="fst-italic fw-light">Bold text</p>
 
- 
+    <!-- Containers -->
+
+    <div class="container my-5">
+      <h2>Normal Container</h2>
+      <p>
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis, ut? Iste
+        voluptatibus tempora maiores vero, assumenda quo facilis aut magni
+        eligendi praesentium labore molestias dignissimos saepe repudiandae
+        deserunt tempore ipsum.
+      </p>
+    </div>
+
+    <div class="container-fluid">
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia tempora
+        mollitia quaerat, voluptatibus reprehenderit placeat optio cum
+        doloremque. Odio repellat modi ut provident sunt hic. Odio delectus eum
+        temporibus nostrum.
+      </p>
+    </div>
+
+    <div class="container-lg my-5">
+      <h2>100% width until lg screens then container,</h2>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
+        sapiente voluptate blanditiis dignissimos repellendus, atque
+        consequuntur optio. Totam dolorem eos sint asperiores? Nihil atque
+        omnis, id magnam voluptatem reprehenderit expedita.
+      </p>
+    </div>
+
+    <div class="container-xl my-5">
+      <h2>100% width until xl screens then container,</h2>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis
+        sapiente voluptate blanditiis dignissimos repellendus, atque
+        consequuntur optio. Totam dolorem eos sint asperiores? Nihil atque
+        omnis, id magnam voluptatem reprehenderit expedita.
+      </p>
+    </div>
+    <br /><br /><br />
+
+    <!-- Grids -->
+
+    <div class="container-lg my-5">
+      <h2>basic grid</h2>
+      <div class="row">
+        <div class="col">
+          <div class="p-5 bg-primary text-light">col 1</div>
+        </div>
+        <div class="col">
+          <div class="p-5 bg-primary text-light">col 2</div>
+        </div>
+        <div class="col">
+          <div class="p-5 bg-primary text-light">col 3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg my-5">
+      <h2>column widths</h2>
+      <div class="row">
+        <div class="col-6">
+          <div class="p-5 bg-primary text-light">col 1</div>
+        </div>
+        <div class="col-3">
+          <div class="p-5 bg-primary text-light">col 2</div>
+        </div>
+        <div class="col-3">
+          <div class="p-5 bg-primary text-light">col 3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg my-5">
+      <h2>responsive column widths</h2>
+      <div class="row">
+        <div class="col-sm-4 col-lg-6">
+          <div class="p-5 bg-primary text-light">col 1</div>
+        </div>
+        <div class="col-sm-4 col-lg-3">
+          <div class="p-5 bg-primary text-light">col 2</div>
+        </div>
+        <div class="col-sm-4 col-lg-3">
+          <div class="p-5 bg-primary text-light">col 3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-lg my-5">
+      <h2>justifying columns</h2>
+      <div class="row justify-content-center">
+        <div class="col-md-3">
+          <div class="p-5 bg-primary text-light">col 1</div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-5 bg-primary text-light">col 2</div>
+        </div>
+        <div class="col-md-3">
+          <div class="p-5 bg-primary text-light">col 3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- navbar -->
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-black">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="#">AtlasAiDev</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active text-white" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled  text-white">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success  text-white" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+
+    <!-- main image and intro text -->
+    <section id="intro">
+      <div class="container-lg">
+        <div class="row justify-content-center">
+          <div class="col-md-5 text-center text-md-start">
+            <h1>
+              <div class="display-2">You Don't Know JS</div>
+              <div class="display-5 text-muted">Gain Coding Skills</div>
+            </h1>
+            <p class="lead my-4 text-muted">Lorem ipsum dolor sit amet.</p>
+            <a href="#pricing" class="btn btn-secondary btn-lg">Buy Now</a>
+          </div>
+          <div class="col-md-5 text-center">
+            <img class="img-fluid" src="ydk_js.jpg" alt="book cover" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- pricing plans -->
+     <div class="container-fluid">
+
+    <div class="card" style="width: 18rem;">
+  <img src="ydk_js.jpg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">You Don't Know JS</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+    <div class="card" style="width: 18rem;">
+  <img src="ydk_js.jpg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">You Don't Know JS</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+    <a href="#" class="btn btn-primary">Go somewhere</a>
+  </div>
+</div>
+</div>
+
+
+<!-- alerts -->
+<section class="container my-5">
+  <h2>Alerts</h2>
+  <div class="alert alert-primary">Primary alert</div>
+  <div class="alert alert-success">Success alert</div>
+  <div class="alert alert-danger">Danger alert</div>
+  <div class="alert alert-warning">Warning alert</div>
+</section>
+
+<!-- badges -->
+<section class="container my-5">
+  <h2>Badges</h2>
+  <h4>Notifications <span class="badge bg-danger">9+</span></h4>
+  <button class="btn btn-primary">
+    Messages <span class="badge bg-light text-dark">4</span>
+  </button>
+</section>
+
+<!-- progress -->
+<section class="container my-5">
+  <h2>Progress Bars</h2>
+  <div class="progress mb-3">
+    <div class="progress-bar" style="width: 25%"></div>
+  </div>
+  <div class="progress mb-3">
+    <div class="progress-bar bg-success" style="width: 50%"></div>
+  </div>
+  <div class="progress mb-3">
+    <div class="progress-bar bg-danger progress-bar-striped" style="width: 75%"></div>
+  </div>
+</section>
+
+<!-- forms -->
+<section class="container my-5">
+  <h2>Forms</h2>
+  <form>
+    <div class="mb-3">
+      <label class="form-label">Email address</label>
+      <input type="email" class="form-control" placeholder="Enter your email" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-control" />
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="check" />
+      <label class="form-check-label" for="check">Remember me</label>
+    </div>
+
+    <button class="btn btn-primary">Submit</button>
+  </form>
+</section>
+
+<!-- input group -->
+<section class="container my-5">
+  <h2>Input Group</h2>
+  <div class="input-group mb-3">
+    <span class="input-group-text">@</span>
+    <input type="text" class="form-control" placeholder="Username" />
+  </div>
+</section>
+
+<!-- table -->
+<section class="container my-5">
+  <h2>Tables</h2>
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th><th>Name</th><th>Job</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Atlas</td><td>Developer</td></tr>
+      <tr><td>2</td><td>Azad</td><td>Engineer</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- group list -->
+<section class="container my-5">
+  <h2>List Group</h2>
+  <ul class="list-group">
+    <li class="list-group-item active">Active item</li>
+    <li class="list-group-item">Another item</li>
+    <li class="list-group-item">Third item</li>
+  </ul>
+</section>
+
+
 
 
 
