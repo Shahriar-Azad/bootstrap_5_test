@@ -147,6 +147,107 @@
                     </div>
                 </div>
 
+                <!-- SECTION 2: Text Injection (Floating Labels) -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h6 class="card-title fw-bold mb-3">Text Content Modification</h6>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted" for="textBefore">Add Text Before Content (intro)</label>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Intro text here" id="textBefore" style="height: 100px"></textarea>
+                                    <label for="textBefore">Introductory Text</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small text-muted" for="textAfter">Add Text After Content (outro)</label>
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Outro text here" id="textAfter" style="height: 100px"></textarea>
+                                    <label for="textAfter">Concluding Text</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Service Selection (Card Radios) -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">Select Text To Speech Service</h5>
+                        <div class="row g-3">
+                            <!-- Option 1: Google Cloud TTS -->
+                            <div class="col-md-6 radio-card">
+                                <input type="radio" id="googleTts" name="ttsService" checked>
+                                <label for="googleTts" class="shadow-sm">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="fw-bold text-primary">Google Cloud TTS</h6>
+                                        <i class="fas fa-check-circle text-primary fs-5"></i>
+                                    </div>
+                                    <p class="small text-muted mb-0">Google Cloud Text-to-Speech converts text into natural-sounding speech using Google's AI voices.</p>
+                                </label>
+                            </div>
+
+                            <!-- Option 2: ChatGPT TTS -->
+                            <div class="col-md-6 radio-card">
+                                <input type="radio" id="chatgptTts" name="ttsService">
+                                <label for="chatgptTts" class="shadow-sm">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="fw-bold">ChatGPT TTS <span class="badge badge-pink rounded-pill ms-2">PRO</span></h6>
+                                        <i class="fas fa-square-check text-muted fs-5"></i>
+                                    </div>
+                                    <p class="small text-muted mb-0">ChatGPT converts written text into realistic, human-like voice using OpenAI's advanced speech technology.</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: Authentication and Input Group -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">Storage Configuration</h5>
+
+                        <!-- Switch Toggle for Backup -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h6>Backup MP3 Files To Google Cloud Storage</h6>
+                                <p class="small text-muted mb-0">Automatically sync generated audio files in cloud storage for backup & easy access.</p>
+                            </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="backupSwitch" checked>
+                            </div>
+                        </div>
+
+                        <!-- Input Group with Button -->
+                        <label for="bucketNameInput" class="form-label small fw-bold">Google Cloud Storage Bucket Name</label>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="bucketNameInput" placeholder="atlas_voice_tts_1757007369" aria-label="Bucket Name">
+                            <button class="btn btn-outline-primary" type="button" id="button-create">Create</button>
+                        </div>
+                        <div class="form-text small text-muted">A unique bucket name is required.</div>
+                    </div>
+                </div>
+
+                <!-- SECTION 5: Exclusion Lists (Pill Badges) -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">Exclusion Settings</h5>
+                        <!-- Tags Input Simulation -->
+                        <label for="excludeCategories" class="form-label small fw-bold">Exclude Categories To Speak</label>
+                        <div class="p-2 border rounded mb-3 bg-light" id="excludeCategories">
+                            <span class="badge bg-secondary text-white fw-normal p-2 me-1 mb-1">uncategorized <i class="fas fa-times ms-1 small cursor-pointer"></i></span>
+                            <span class="badge bg-secondary text-white fw-normal p-2 me-1 mb-1">news <i class="fas fa-times ms-1 small cursor-pointer"></i></span>
+                            <input type="text" class="form-control-plaintext d-inline w-auto" placeholder="Add category...">
+                        </div>
+
+                        <label for="excludeTags" class="form-label small fw-bold">Exclude Tags To Speak</label>
+                        <div class="p-2 border rounded bg-light" id="excludeTags">
+                            <span class="badge bg-secondary text-white fw-normal p-2 me-1 mb-1">untagged <i class="fas fa-times ms-1 small cursor-pointer"></i></span>
+                            <input type="text" class="form-control-plaintext d-inline w-auto" placeholder="Add tag...">
+                        </div>
+                    </div>
+                </div>
+
 
     </main>
 
