@@ -90,7 +90,7 @@ function MegaDemo() {
 
   return (
     <Container fluid className="p-4" style={{ background: "#f7f9fb", minHeight: "100vh" }}>
-      <h1 className="mb-4">React-Bootstrap — Mega Demo</h1>
+      <h1 className="mb-4">AtlasAiDev — Mega Demo</h1>
 
       {/* NAVBAR */}
       <Navbar bg="dark" variant="dark" expand="lg" className="mb-4 rounded">
@@ -543,7 +543,7 @@ function MegaDemo() {
 
       <hr />
 
-      <footer className="text-center small text-muted mt-3">React-Bootstrap Mega Demo — single file</footer>
+      <footer className="text-center small text-muted mt-3">AtlasAiDev</footer>
     </Container>
   );
 }
