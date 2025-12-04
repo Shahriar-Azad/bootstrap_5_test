@@ -1,10 +1,4 @@
-/* src/MegaDemo.jsx
-   A single-file React-Bootstrap mega showcase (Option A)
-   - Copy/paste into your project
-   - Requires: react, react-dom, react-bootstrap, bootstrap CSS imported in index.js
-*/
-
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Alert,
   Accordion,
@@ -48,208 +42,193 @@ import {
   Toast,
   ToastContainer,
   Tooltip,
+  Overlay,
+  Fade,
+  Collapse as RB_Collapse,
 } from "react-bootstrap";
 
-function MegaDemo() {
-  // state for various components
+function AtlasAiDev() {
+  // General UI state
   const [showAlert, setShowAlert] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [offcanvasShow, setOffcanvasShow] = useState(false);
-  const [collapseOpen, setCollapseOpen] = useState(false);
-  const [toastShow, setToastShow] = useState(false);
+  const [offcanvasPlacement, setOffcanvasPlacement] = useState("end");
+  const [toastStack, setToastStack] = useState([]);
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [tooltipText, setTooltipText] = useState("Tooltip text");
   const [activeTab, setActiveTab] = useState("home");
-  const [progress, setProgress] = useState(10);
-  const [validated, setValidated] = useState(false);
-  const [formValue, setFormValue] = useState("");
-  const [paginationActive, setPaginationActive] = useState(2);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [progress, setProgress] = useState(45);
+  const [validated, setValidated] = useState(false);
+  const [paginationActive, setPaginationActive] = useState(2);
+  const [showOverlay, setShowOverlay] = useState(false);
+  const overlayTargetRef = useRef(null);
   const fileInputRef = useRef(null);
+  const [placeholderLoading, setPlaceholderLoading] = useState(true);
+  const [accordionOpen, setAccordionOpen] = useState("0");
 
-  // simple handlers
+  // NEW FORM STATES
+  const [isSwitched, setIsSwitched] = useState(false);
+  const [checkboxState, setCheckboxState] = useState(false);
+  const [radioValue, setRadioValue] = useState("1");
+  const [rangeValue, setRangeValue] = useState(50);
+
+  // Programmatic modal example
+  const openModal = () => setModalShow(true);
+  const closeModal = () => setModalShow(false);
+
+  // Toast helpers
+  const pushToast = (title, body) => {
+    const id = Date.now();
+    setToastStack((t) => [...t, { id, title, body, createdAt: new Date() }]);
+    // auto-remove after 4s
+    setTimeout(() => setToastStack((t) => t.filter((x) => x.id !== id)), 4200);
+  };
+
+  // Simulate loading skeleton
+  useEffect(() => {
+    const t = setTimeout(() => setPlaceholderLoading(false), 1600);
+    return () => clearTimeout(t);
+  }, []);
+
   const handleFormSubmit = (e) => {
-    const form = e.currentTarget;
     e.preventDefault();
+    const form = e.currentTarget;
     if (form.checkValidity() === false) {
       setValidated(true);
       return;
     }
     setValidated(true);
-    alert("Form is valid! Value: " + formValue);
+    pushToast("Form", "Submitted successfully");
   };
 
-  const popover = (
+  // Popover component
+  const examplePopover = (
     <Popover id="popover-basic">
-      <Popover.Header as="h3">Popover</Popover.Header>
+      <Popover.Header as="h3">Popover title</Popover.Header>
       <Popover.Body>
-        Hey — this is a popover. You can place pretty much any JSX here.
+        And here's some **amazing** content. It's very engaging.
       </Popover.Body>
     </Popover>
   );
 
-  const tooltip = (props) => <Tooltip id="tooltip" {...props}>Tooltip text</Tooltip>;
+  const exampleTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {tooltipText}
+    </Tooltip>
+  );
+
+  // More advanced pagination logic (example)
+  const totalPages = 7;
+  const paginationItems = [];
+  for (let number = 1; number <= totalPages; number++) {
+    paginationItems.push(
+      <Pagination.Item key={number} active={number === paginationActive} onClick={() => setPaginationActive(number)}>
+        {number}
+      </Pagination.Item>
+    );
+  }
+
+  // Nested accordion data example
+  const nestedAccordion = (
+    <Accordion alwaysOpen activeKey={accordionOpen} onSelect={(k) => setAccordionOpen(k)}>
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>Parent Item 1</Accordion.Header>
+        <Accordion.Body>
+          Parent content here. child accordion below.
+          <Accordion>
+            <Accordion.Item eventKey="0-0">
+              <Accordion.Header>Child A</Accordion.Header>
+              <Accordion.Body>Child A content</Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="0-1">
+              <Accordion.Header>Child B</Accordion.Header>
+              <Accordion.Body>Child B content</Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        </Accordion.Body>
+      </Accordion.Item>
+
+      <Accordion.Item eventKey="1">
+        <Accordion.Header>Parent Item 2</Accordion.Header>
+        <Accordion.Body>This is another parent item body.</Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+  );
 
   return (
     <Container fluid className="p-4" style={{ background: "#f7f9fb", minHeight: "100vh" }}>
-      <h1 className="mb-4">AtlasAiDev — Mega Demo</h1>
+      <h1 className="mb-4">AtlasAiDev — Mega Demo (Expanded)</h1>
 
-      {/* NAVBAR */}
-      <Navbar bg="dark" variant="dark" expand="lg" className="mb-4 rounded">
+      {/* NAVBAR with Navs & Pills + Search */}
+      <Navbar bg="light" expand="lg" className="mb-4 rounded">
         <Container fluid>
-          <Navbar.Brand href="#">MegaDemo</Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbar-demo" />
-          <Navbar.Collapse id="navbar-demo">
-            <Nav className="me-auto">
+          <Navbar.Brand href="#home">MegaDemo</Navbar.Brand>
+          <Navbar.Toggle aria-controls="navbar-expanded" />
+          <Navbar.Collapse id="navbar-expanded">
+            <Nav className="me-auto" variant="pills">
               <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#components">Components</Nav.Link>
-              <NavDropdown title="More" id="nav-dropdown-demo">
-                <NavDropdown.Item href="#action/1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/2">Another action</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Header>Header</NavDropdown.Header>
-                <NavDropdown.Item href="#action/3">Separated link</NavDropdown.Item>
+              <Nav.Link href="#features">Features</Nav.Link>
+              <Nav.Link href="#pricing">Pricing</Nav.Link>
+              <NavDropdown title="Resources" id="nav-dropdown-resources">
+                <NavDropdown.Item href="#docs">Docs</NavDropdown.Item>
+                <NavDropdown.Item href="#examples">Examples</NavDropdown.Item>
               </NavDropdown>
             </Nav>
 
-            <Nav>
-              <Nav.Link onClick={() => setOffcanvasShow(true)}>Open Offcanvas</Nav.Link>
-            </Nav>
+            <Form className="d-flex" style={{ gap: 8 }}>
+              <Form.Control type="search" placeholder="Search" aria-label="Search" />
+              <Button variant="outline-primary">Search</Button>
+            </Form>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
-      {/* GRID: Row / Col */}
       <Row className="gy-4">
         <Col lg={8}>
-          {/* ALERTS & BADGE */}
+          {/* Alerts & Badges */}
           <section id="alerts">
             <h2>Alerts & Badges</h2>
             {showAlert ? (
-              <Alert variant="warning" onClose={() => setShowAlert(false)} dismissible>
-                <Alert.Heading>Heads up!</Alert.Heading>
-                <p>This is an example warning alert — it can be dismissed.</p>
+              <Alert variant="info" onClose={() => setShowAlert(false)} dismissible>
+                <Alert.Heading>Heads up — expanded!</Alert.Heading>
+                <p>Now this demo includes a lot more components and usage patterns.</p>
               </Alert>
             ) : (
-              <Button size="sm" className="mb-2" onClick={() => setShowAlert(true)}>Show Alert</Button>
+              <Button size="sm" onClick={() => setShowAlert(true)} className="mb-2">Show Alert</Button>
             )}
 
             <p>
-              Notification <Badge bg="primary">4</Badge>{" "}
-              <Badge pill bg="success">New</Badge>
+              Messages <Badge bg="danger">9</Badge> <Badge pill bg="secondary">Beta</Badge>
             </p>
           </section>
 
           <hr />
 
-          {/* CARDS */}
+          {/* Advanced Cards + Figures + Media */}
           <section id="cards">
-            <h2>Cards</h2>
-            <Card className="mb-3">
-              <Card.Body>
-                <Card.Title>Simple card</Card.Title>
-                <Card.Text>Cards are flexible content containers.</Card.Text>
-                <Button>Go</Button>
-              </Card.Body>
-            </Card>
-
-            <Card bg="light" text="dark" className="mb-3">
-              <Card.Header>Header</Card.Header>
-              <Card.Body>
-                <Card.Title>Header Card</Card.Title>
-                <Card.Text>Card with header and footer.</Card.Text>
-              </Card.Body>
-              <Card.Footer>Footer</Card.Footer>
-            </Card>
-
-            <Card style={{ width: "18rem" }}>
-              <Card.Img variant="top" src="https://picsum.photos/400/200?random=10" />
-              <Card.Body>
-                <Card.Title>Card with Image</Card.Title>
-                <Card.Text>Images integrate easily.</Card.Text>
-                <Button variant="outline-primary">Action</Button>
-              </Card.Body>
-            </Card>
-          </section>
-
-          <hr />
-
-          {/* FORMS: many parts */}
-          <section id="forms">
-            <h2>Forms (Validation, Range, Checks, Select)</h2>
-            <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
-              <Row className="g-3 align-items-center">
-                <Col md>
-                  <FloatingLabel controlId="floatingInput" label="Email address" className="mb-3">
-                    <Form.Control required type="email" placeholder="name@example.com" />
-                    <Form.Control.Feedback type="invalid">Please provide a valid email.</Form.Control.Feedback>
-                  </FloatingLabel>
-                </Col>
-
-                <Col md>
-                  <Form.Group controlId="formSelect" className="mb-3">
-                    <Form.Label>Select</Form.Label>
-                    <Form.Select aria-label="Example select" required>
-                      <option value="">Choose...</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                    </Form.Select>
-                    <Form.Control.Feedback type="invalid">Select an option.</Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Form.Group controlId="formRange" className="mb-3">
-                <Form.Label>Volume: {progress}%</Form.Label>
-                <Form.Range value={progress} onChange={(e) => setProgress(Number(e.target.value))} />
-              </Form.Group>
-
-              <Form.Group controlId="formTextarea" className="mb-3">
-                <Form.Label>Example text</Form.Label>
-                <Form.Control as="textarea" rows={2} />
-                <Form.Text className="text-muted">Helpful hint text below the control.</Form.Text>
-              </Form.Group>
-
-              <Form.Check type="checkbox" id="check1" label="Accept terms" className="mb-2" required />
-              <Form.Check type="switch" id="switch1" label="Toggle this switch" className="mb-3" />
-
-              <InputGroup className="mb-3">
-                <InputGroup.Text>@</InputGroup.Text>
-                <Form.Control placeholder="Username" aria-label="Username" value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-                <InputGroup.Text>.com</InputGroup.Text>
-              </InputGroup>
-
-              <div className="d-flex gap-2">
-                <Button type="submit" variant="primary">Submit</Button>
-                <Button variant="secondary" onClick={() => { setValidated(false); setFormValue(""); }}>Reset</Button>
-              </div>
-            </Form>
-          </section>
-
-          <hr />
-
-          {/* LISTGROUP & FIGURE & IMAGE */}
-          <section id="lists">
-            <h2>ListGroup, Figure, Image</h2>
-
+            <h2>Cards, Figures & Media</h2>
             <Row>
               <Col md={6}>
-                <ListGroup>
-                  <ListGroup.Item active>Active Item</ListGroup.Item>
-                  <ListGroup.Item>Item Two</ListGroup.Item>
-                  <ListGroup.Item disabled>Disabled</ListGroup.Item>
-                  <ListGroup.Item action href="#link1">Clickable link</ListGroup.Item>
-                </ListGroup>
+                <Card className="mb-3">
+                  <Card.Img variant="top" src="https://picsum.photos/640/240?random=1" />
+                  <Card.Body>
+                    <Card.Title>Photo Card</Card.Title>
+                    <Card.Text>Use images, lists, and actions inside cards.</Card.Text>
+                    <Button variant="outline-primary" onClick={() => pushToast("Card", "Clicked card action")}>Action</Button>
+                  </Card.Body>
+                </Card>
               </Col>
 
               <Col md={6}>
                 <Figure>
-                  <Figure.Image width={160} height={120} alt="171x180" src="https://picsum.photos/200/140?random=5" />
-                  <Figure.Caption>
-                    A simple <strong>Figure</strong> caption below an image.
-                  </Figure.Caption>
+                  <Figure.Image width={260} height={140} alt="random" src="https://picsum.photos/320/180?random=2" />
+                  <Figure.Caption>Responsive figure caption with <Badge bg="info">Info</Badge>.</Figure.Caption>
                 </Figure>
 
-                <div className="mt-2">
-                  <Image src="https://picsum.photos/320/120?random=12" fluid rounded />
+                <div className="mt-2 d-flex gap-2">
+                  <Image src="https://picsum.photos/200/80?random=3" rounded fluid />
+                  <Image src="https://picsum.photos/200/80?random=4" rounded fluid />
                 </div>
               </Col>
             </Row>
@@ -257,102 +236,222 @@ function MegaDemo() {
 
           <hr />
 
-          {/* CAROUSEL */}
+          {/* Forms: Floating Labels, InputGroup combos, Validation + NEW CONTROLS */}
+          <section id="forms">
+            <h2>Forms (Floating Labels, Checks, InputGroups)</h2>
+            <Form noValidate validated={validated} onSubmit={handleFormSubmit}>
+              <Row className="g-3 align-items-center">
+                <Col md>
+                  <FloatingLabel controlId="floatingEmail" label="Email address" className="mb-3">
+                    <Form.Control required type="email" placeholder="name@example.com" />
+                    <Form.Control.Feedback type="invalid">Please provide a valid email.</Form.Control.Feedback>
+                  </FloatingLabel>
+                </Col>
+
+                <Col md>
+                  <FloatingLabel controlId="floatingSelect" label="Plan" className="mb-3">
+                    <Form.Select aria-label="Plan select" required>
+                      <option value="">Choose plan...</option>
+                      <option value="free">Free</option>
+                      <option value="pro">Pro</option>
+                    </Form.Select>
+                    <Form.Control.Feedback type="invalid">Select a plan.</Form.Control.Feedback>
+                  </FloatingLabel>
+                </Col>
+              </Row>
+
+              {/* NEW: Checkbox/Radio/Switch */}
+              <Row className="g-3 mb-3">
+                <Col md={6}>
+                  <Form.Group controlId="formGroupCheck">
+                    <Form.Check
+                      type="checkbox"
+                      label="Agree to terms"
+                      checked={checkboxState}
+                      onChange={(e) => setCheckboxState(e.target.checked)}
+                      required
+                    />
+                    <Form.Text className="text-muted">
+                      You must agree to proceed.
+                    </Form.Text>
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Check
+                    type="switch"
+                    id="custom-switch"
+                    label={isSwitched ? "Enabled" : "Disabled"}
+                    checked={isSwitched}
+                    onChange={(e) => setIsSwitched(e.target.checked)}
+                  />
+                </Col>
+              </Row>
+              
+              {/* NEW: Inline Radio Group */}
+              <div className="mb-3">
+                <Form.Label>Choose Option:</Form.Label>
+                <div className="d-flex gap-3">
+                  {["1", "2", "3"].map((val) => (
+                    <Form.Check
+                      inline
+                      key={`radio-inline-${val}`}
+                      label={`Option ${val}`}
+                      name="radioGroup"
+                      type="radio"
+                      id={`radio-inline-${val}`}
+                      value={val}
+                      checked={radioValue === val}
+                      onChange={(e) => setRadioValue(e.target.value)}
+                    />
+                  ))}
+                </div>
+              </div>
+
+
+              <InputGroup className="mb-3">
+                <DropdownButton variant="outline-secondary" title="@" id="input-group-dropdown-1">
+                  <Dropdown.Item href="#">Action</Dropdown.Item>
+                  <Dropdown.Item href="#">Another</Dropdown.Item>
+                </DropdownButton>
+                <Form.Control placeholder="Username" aria-label="Username" />
+                <Button variant="secondary">Check</Button>
+              </InputGroup>
+
+              <Form.Group controlId="formRange" className="mb-3">
+                <Form.Label>Progress: {progress}%</Form.Label>
+                <Form.Range value={progress} onChange={(e) => setProgress(Number(e.target.value))} />
+              </Form.Group>
+
+              {/* NEW: Range Input with value display */}
+              <Form.Group controlId="formCustomRange" className="mb-3">
+                <Form.Label>Custom Range Value: <Badge bg="primary">{rangeValue}</Badge></Form.Label>
+                <Form.Range 
+                  min="0" max="100" step="5"
+                  value={rangeValue}
+                  onChange={(e) => setRangeValue(Number(e.target.value))}
+                />
+              </Form.Group>
+
+              <div className="d-flex gap-2">
+                <Button type="submit">Submit</Button>
+                <Button variant="outline-secondary" onClick={() => { setValidated(false); pushToast("Form", "Reset"); }}>Reset</Button>
+              </div>
+            </Form>
+          </section>
+
+          <hr />
+
+          {/* Carousel: advanced usage */}
           <section id="carousel">
-            <h2>Carousel</h2>
+            <h2>Carousels</h2>
             <Carousel activeIndex={carouselIndex} onSelect={(i) => setCarouselIndex(i)} className="mb-3">
               <Carousel.Item>
-                <img className="d-block w-100" src="https://picsum.photos/800/300?1" alt="slide1" />
-                <Carousel.Caption><h3>Slide 1</h3><p>Caption for slide 1.</p></Carousel.Caption>
+                <img className="d-block w-100" src="https://picsum.photos/900/300?random=10" alt="slide1" />
+                <Carousel.Caption><h3>Slide 1</h3><p>Beautiful scenery.</p></Carousel.Caption>
               </Carousel.Item>
               <Carousel.Item>
-                <img className="d-block w-100" src="https://picsum.photos/800/300?2" alt="slide2" />
-                <Carousel.Caption><h3>Slide 2</h3><p>Caption for slide 2.</p></Carousel.Caption>
+                <img className="d-block w-100" src="https://picsum.photos/900/300?random=11" alt="slide2" />
+                <Carousel.Caption><h3>Slide 2</h3><p>Another caption text.</p></Carousel.Caption>
               </Carousel.Item>
             </Carousel>
+
+            <Card className="p-3">
+              <Row>
+                <Col sm={4}><Image src="https://picsum.photos/120/80?random=6" thumbnail /></Col>
+                <Col sm={8}><p>Thumbnail carousel preview — clickable thumbnails would change slides (demo).</p></Col>
+              </Row>
+            </Card>
           </section>
 
           <hr />
 
-          {/* TABLES */}
+          {/* Tables & ListGroup */}
           <section id="tables">
-            <h2>Table</h2>
-            <Table responsive striped bordered hover>
+            <h2>Table & ListGroup</h2>
+            <Table responsive bordered hover size="sm">
               <thead>
-                <tr><th>#</th><th>Name</th><th>Role</th><th>Email</th></tr>
+                <tr><th>#</th><th>Name</th><th>Role</th><th>Actions</th></tr>
               </thead>
               <tbody>
-                <tr><td>1</td><td>Azad</td><td>Dev</td><td>azad@example.com</td></tr>
-                <tr><td>2</td><td>Shahriar</td><td>Designer</td><td>shahriar@example.com</td></tr>
+                <tr>
+                  <td>1</td>
+                  <td>Azad</td>
+                  <td><Badge bg="success">Dev</Badge></td>
+                  <td><Button size="sm" onClick={() => pushToast("Row", "Clicked Azad")}>Notify</Button></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Shahriar</td>
+                  <td><Badge bg="info">Designer</Badge></td>
+                  <td><Button size="sm" variant="outline-primary">Edit</Button></td>
+                </tr>
               </tbody>
             </Table>
+
+            <ListGroup horizontal className="mt-3">
+              <ListGroup.Item action href="#">Home</ListGroup.Item>
+              <ListGroup.Item>Profile</ListGroup.Item>
+              <ListGroup.Item disabled>Disabled</ListGroup.Item>
+            </ListGroup>
           </section>
 
           <hr />
 
-          {/* TABS + ACCORDION */}
+          {/* Tabs & Accordion */}
           <section id="tabs-accordion">
-            <Row>
-              <Col md={6}>
-                <h2>Tabs</h2>
-                <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} className="mb-3">
-                  <Tab eventKey="home" title="Home">
-                    <p>Home tab content</p>
-                  </Tab>
-                  <Tab eventKey="profile" title="Profile">
-                    <p>Profile tab content</p>
-                  </Tab>
-                  <Tab eventKey="contact" title="Contact" disabled>
-                    Disabled
-                  </Tab>
-                </Tabs>
-              </Col>
+            <h2>Tabs & Accordion</h2>
+            <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} className="mb-3" mountOnEnter>
+              <Tab eventKey="home" title="Home"><p>Home content — light and fast.</p></Tab>
+              <Tab eventKey="profile" title="Profile"><p>Profile content — edit and save.</p></Tab>
+              <Tab eventKey="settings" title="Settings"><p>Settings content.</p></Tab>
+            </Tabs>
 
-              <Col md={6}>
-                <h2>Accordion</h2>
-                <Accordion defaultActiveKey="0">
-                  <Accordion.Item eventKey="0">
-                    <Accordion.Header>Accordion Item #1</Accordion.Header>
-                    <Accordion.Body>This is the accordion body for item 1.</Accordion.Body>
-                  </Accordion.Item>
-                  <Accordion.Item eventKey="1">
-                    <Accordion.Header>Accordion Item #2</Accordion.Header>
-                    <Accordion.Body>This is the accordion body for item 2.</Accordion.Body>
-                  </Accordion.Item>
-                </Accordion>
-              </Col>
-            </Row>
+            <h4>Nested Accordion</h4>
+            {nestedAccordion}
           </section>
 
           <hr />
 
-          {/* OVERLAYS: Tooltip & Popover */}
+          {/* Overlays: Tooltip, Popover, Overlay API */}
           <section id="overlays">
-            <h2>Tooltip & Popover</h2>
-            <OverlayTrigger placement="top" overlay={tooltip}>
-              <Button variant="outline-dark" className="me-2">Hover for tooltip</Button>
-            </OverlayTrigger>
-
-            <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-              <Button variant="outline-secondary">Click for popover</Button>
-            </OverlayTrigger>
-          </section>
-
-          <hr />
-
-          {/* PROGRESS, SPINNER, PLACEHOLDER */}
-          <section id="feedback">
-            <h2>Progress, Spinner, Placeholder</h2>
-            <ProgressBar now={progress} label={`${progress}%`} className="mb-2" />
+            <h2>Tooltips, Popovers & Overlay</h2>
             <div className="mb-2">
-              <ProgressBar striped variant="info" now={60} />
+              <OverlayTrigger placement="top" overlay={exampleTooltip}>
+                <Button variant="outline-dark" className="me-2">Hover tooltip</Button>
+              </OverlayTrigger>
+
+              <OverlayTrigger trigger="click" placement="right" overlay={examplePopover} rootClose>
+                <Button variant="outline-secondary">Click popover</Button>
+              </OverlayTrigger>
             </div>
 
-            <Spinner animation="border" role="status" className="me-2"><span className="visually-hidden">Loading...</span></Spinner>
-            <Spinner animation="grow" variant="success" />
+            <div className="mt-3">
+              <Button ref={overlayTargetRef} onClick={() => setShowOverlay((s) => !s)} className="me-2">Toggle Overlay</Button>
+              <Overlay target={overlayTargetRef.current} show={showOverlay} placement="bottom">
+                {({ placement, arrowProps, show: _show, popper, ...props }) => (
+                  <div {...props} style={{ background: "white", padding: 12, border: "1px solid #ddd", borderRadius: 6 }}>
+                    <strong>Overlay content</strong>
+                    <div className="text-muted">Useful for custom popups</div>
+                  </div>
+                )}
+              </Overlay>
+            </div>
+          </section>
+
+          <hr />
+
+          {/* Feedback: Progress, Spinners, Placeholders */}
+          <section id="feedback">
+            <h2>Progress, Spinners & Placeholders</h2>
+            <ProgressBar now={progress} label={`${progress}%`} className="mb-2" />
+
+            <div className="mb-2">
+              <Spinner animation="border" role="status" className="me-2"><span className="visually-hidden">Loading...</span></Spinner>
+              <Spinner animation="grow" />
+            </div>
 
             <div className="mt-3">
-              <Placeholder as="p" animation="glow">
+              <Placeholder as="p" animation={placeholderLoading ? "glow" : null}>
                 <Placeholder xs={6} /> <Placeholder xs={4} /> <Placeholder xs={8} />
               </Placeholder>
             </div>
@@ -360,67 +459,54 @@ function MegaDemo() {
 
           <hr />
 
-          {/* FOOTER */}
+          {/* Footer of left column */}
           <section className="mt-4">
-            <h3 className="text-center">End of Left Column — continue exploring right column</h3>
+            <h5>That's a large set — keep exploring the right column for controls</h5>
           </section>
         </Col>
 
-        {/* RIGHT COLUMN: Controls, Buttons, Dropdowns, Pagination, Modal, Offcanvas, Toasts */}
+        {/* RIGHT COLUMN: Controls, Buttons, Dropdowns, Pagination, Modal, Offcanvas, Toasts, Ratio, Stack */}
         <Col lg={4}>
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Buttons & Button Groups</Card.Title>
-
-              <div className="mb-2">
-                <Button variant="primary" className="me-2">Primary</Button>
-                <Button variant="outline-primary" className="me-2">Outline</Button>
+              <Card.Title>Buttons & Groups</Card.Title>
+              <div className="mb-2 d-flex flex-wrap gap-2">
+                <Button variant="primary">Primary</Button>
+                <Button variant="outline-primary">Outline</Button>
                 <Button variant="danger">Danger</Button>
+                <Button variant="link">Link</Button>
               </div>
 
-              <ButtonGroup className="mb-2">
-                <Button>Left</Button>
-                <Button>Middle</Button>
-                <Button>Right</Button>
+              <ButtonGroup vertical className="mb-2 w-100">
+                <Button>Vertical 1</Button>
+                <Button>Vertical 2</Button>
               </ButtonGroup>
 
-              <div className="mb-2">
-                <ButtonToolbar>
-                  <ButtonGroup className="me-2">
-                    <Button variant="secondary">1</Button>
-                    <Button variant="secondary">2</Button>
-                  </ButtonGroup>
-                  <ButtonGroup>
-                    <Button variant="outline-secondary">A</Button>
-                    <Button variant="outline-secondary">B</Button>
-                  </ButtonGroup>
-                </ButtonToolbar>
-              </div>
+              <SplitButton title="Split action" id="split-1" variant="success" className="mb-2">
+                <Dropdown.Item>Action</Dropdown.Item>
+                <Dropdown.Item>Another action</Dropdown.Item>
+              </SplitButton>
 
-              <div className="mb-2">
-                <SplitButton id="split-basic" title="Split Action" variant="success" className="me-2">
-                  <Dropdown.Item>Action</Dropdown.Item>
-                  <Dropdown.Item>Another action</Dropdown.Item>
-                </SplitButton>
-
-                <DropdownButton id="dropdown-basic-button" title="Dropdown">
-                  <Dropdown.Item>Action</Dropdown.Item>
-                  <Dropdown.Item>Another action</Dropdown.Item>
-                </DropdownButton>
-              </div>
-
-              <div className="mt-3">
-                <CloseButton aria-label="Close example" />
-              </div>
+              <DropdownButton id="dropdown-basic-button" title="Dropdown">
+                <Dropdown.Item>One</Dropdown.Item>
+                <Dropdown.Item>Two</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item>Separated</Dropdown.Item>
+              </DropdownButton>
             </Card.Body>
           </Card>
 
           <Card className="mb-3">
             <Card.Body>
               <Card.Title>Modal & Offcanvas</Card.Title>
+              <div className="d-flex gap-2 mb-2">
+                <Button onClick={openModal}>Open Modal</Button>
+                <Button onClick={() => { setOffcanvasPlacement("start"); setOffcanvasShow(true); }}>Offcanvas Left</Button>
+              </div>
+
               <div className="d-flex gap-2">
-                <Button variant="primary" onClick={() => setModalShow(true)}>Open Modal</Button>
-                <Button variant="info" onClick={() => setOffcanvasShow(true)}>Open Offcanvas</Button>
+                <Button onClick={() => { setOffcanvasPlacement("end"); setOffcanvasShow(true); }}>Offcanvas Right</Button>
+                <Button onClick={() => { setOffcanvasPlacement("top"); setOffcanvasShow(true); }}>Offcanvas Top</Button>
               </div>
             </Card.Body>
           </Card>
@@ -434,85 +520,84 @@ function MegaDemo() {
                 <Breadcrumb.Item active>Data</Breadcrumb.Item>
               </Breadcrumb>
 
-              <Pagination className="mt-2">
-                <Pagination.Prev onClick={() => setPaginationActive((p) => Math.max(1, p - 1))} />
-                <Pagination.Item active={paginationActive === 1} onClick={() => setPaginationActive(1)}>1</Pagination.Item>
-                <Pagination.Item active={paginationActive === 2} onClick={() => setPaginationActive(2)}>2</Pagination.Item>
-                <Pagination.Item active={paginationActive === 3} onClick={() => setPaginationActive(3)}>3</Pagination.Item>
-                <Pagination.Next onClick={() => setPaginationActive((p) => Math.min(3, p + 1))} />
-              </Pagination>
+              <Pagination className="mt-2">{paginationItems}</Pagination>
             </Card.Body>
           </Card>
 
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Toast</Card.Title>
-              <Button onClick={() => setToastShow(true)}>Show Toast</Button>
+              <Card.Title>Toasts</Card.Title>
+              <div className="d-flex gap-2 mb-2">
+                <Button onClick={() => pushToast("Info", "A toast was pushed")}>Push Toast</Button>
+                <Button variant="outline-secondary" onClick={() => setToastStack([])}>Clear</Button>
+              </div>
+
               <ToastContainer position="top-end" className="p-3">
-                <Toast bg="light" onClose={() => setToastShow(false)} show={toastShow} delay={2500} autohide>
-                  <Toast.Header>
-                    <strong className="me-auto">Megademo</strong>
-                    <small>now</small>
-                  </Toast.Header>
-                  <Toast.Body>Simple toast message</Toast.Body>
-                </Toast>
+                {toastStack.map((t) => (
+                  <Toast key={t.id} onClose={() => setToastStack((s) => s.filter((x) => x.id !== t.id))} show>
+                    <Toast.Header>
+                      <strong className="me-auto">{t.title}</strong>
+                      <small>now</small>
+                    </Toast.Header>
+                    <Toast.Body>{t.body}</Toast.Body>
+                  </Toast>
+                ))}
               </ToastContainer>
             </Card.Body>
           </Card>
 
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Collapse</Card.Title>
-              <Button
-                onClick={() => setCollapseOpen(!collapseOpen)}
-                aria-controls="collapse-text"
-                aria-expanded={collapseOpen}
-              >
-                Toggle Collapse
-              </Button>
-
-              <Collapse in={collapseOpen} className="mt-2">
-                <div id="collapse-text">
-                  <Card body>This content is collapsed</Card>
+              <Card.Title>Collapse & File</Card.Title>
+              <Collapse in={true} className="mb-2">
+                <div>
+                  <Card body>Always visible collapse example</Card>
                 </div>
               </Collapse>
+
+              {/* NEW: File Input with custom style */}
+              <Form.Group controlId="formFileLg" className="mb-3">
+                <Form.Label>Custom File Input (Large)</Form.Label>
+                <Form.Control type="file" ref={fileInputRef} size="lg" />
+              </Form.Group>
+              <Button onClick={() => fileInputRef.current && fileInputRef.current.click()}>Open file dialog</Button>
             </Card.Body>
           </Card>
 
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Upload & File</Card.Title>
-              <Form.Group controlId="formFile" className="mb-3">
-                <Form.Label>Example file input</Form.Label>
-                <Form.Control type="file" ref={fileInputRef} />
-              </Form.Group>
-              <Button onClick={() => fileInputRef.current && fileInputRef.current.click()}>Open file dialog</Button>
+              <Card.Title>Ratio & Stack</Card.Title>
+              <Ratio aspectRatio="16x9" className="mb-2">
+                <iframe title="demo" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowFullScreen />
+              </Ratio>
+
+              <Stack gap={2}>
+                <div className="bg-white p-2 border">First item</div>
+                <div className="bg-white p-2 border">Second item</div>
+              </Stack>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
-      {/* Modal implementation */}
-      <Modal show={modalShow} onHide={() => setModalShow(false)} centered>
+      {/* Programmatic Modal */}
+      <Modal show={modalShow} onHide={closeModal} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Example Modal</Modal.Title>
+          <Modal.Title>Programmatic Modal</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>This is a modal body demonstrating React-Bootstrap modal usage.</p>
+          <p>This modal was opened from a programmatic handler.</p>
+          <Button onClick={() => { pushToast("Modal", "Saved changes"); closeModal(); }}>Save</Button>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setModalShow(false)}>Close</Button>
-          <Button variant="primary">Save changes</Button>
-        </Modal.Footer>
       </Modal>
 
-      {/* Offcanvas */}
-      <Offcanvas show={offcanvasShow} onHide={() => setOffcanvasShow(false)} placement="end">
+      {/* Offcanvas with variable placement */}
+      <Offcanvas show={offcanvasShow} onHide={() => setOffcanvasShow(false)} placement={offcanvasPlacement}>
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Offcanvas Menu</Offcanvas.Title>
+          <Offcanvas.Title>Offcanvas — {offcanvasPlacement}</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <p>Use Offcanvas for side panels and mobile menus.</p>
+          <p>Offcanvas can be placed at start, end, top or bottom.</p>
           <ListGroup>
             <ListGroup.Item action>Profile</ListGroup.Item>
             <ListGroup.Item action>Settings</ListGroup.Item>
@@ -521,31 +606,11 @@ function MegaDemo() {
         </Offcanvas.Body>
       </Offcanvas>
 
-      {/* Footer Cards: Ratio, Stack */}
-      <section className="mt-4">
-        <Row>
-          <Col md={6}>
-            <h4>Ratio (16:9)</h4>
-            <Ratio aspectRatio="16x9">
-              <iframe title="demo" src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowFullScreen />
-            </Ratio>
-          </Col>
-          <Col md={6}>
-            <h4>Stack</h4>
-            <Stack gap={2}>
-              <div className="bg-white p-2 border">First item</div>
-              <div className="bg-white p-2 border">Second item</div>
-              <div className="bg-white p-2 border">Third item</div>
-            </Stack>
-          </Col>
-        </Row>
-      </section>
-
+      {/* Footer */}
       <hr />
-
       <footer className="text-center small text-muted mt-3">AtlasAiDev</footer>
     </Container>
   );
 }
 
-export default MegaDemo;
+export default AtlasAiDev;
